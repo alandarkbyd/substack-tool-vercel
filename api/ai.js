@@ -1,17 +1,12 @@
 const https = require("https");
 
-export default async function handler(req, res) {
-  // CORS headers
+module.exports = async function (req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // CORS preflight
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+  if (req.method === "OPTIONS") return res.status(200).end();
 
-  // GET দিয়ে test করা যাবে
   if (req.method === "GET") {
     return res.status(200).json({ status: "ok", message: "Substack AI function is running on Vercel!" });
   }
@@ -21,7 +16,6 @@ export default async function handler(req, res) {
   }
 
   const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-
   if (!OPENROUTER_API_KEY) {
     return res.status(500).json({
       error: "[Server] OPENROUTER_API_KEY সেট নেই। Vercel → Project Settings → Environment Variables চেক করো।"
@@ -29,7 +23,6 @@ export default async function handler(req, res) {
   }
 
   const { model, messages, max_tokens, temperature } = req.body;
-
   if (!model || !messages) {
     return res.status(400).json({ error: "model এবং messages দুটোই দরকার।" });
   }
@@ -83,4 +76,4 @@ export default async function handler(req, res) {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-}
+};
