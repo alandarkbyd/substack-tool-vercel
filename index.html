@@ -449,12 +449,12 @@
       <div class="input-group" style="flex:2;">
         <label>🤖 AI Model</label>
         <select id="modelSelect" onchange="updateModelInfo()">
-          <option value="mistralai/mistral-7b-instruct:free">⚡ Mistral 7B — Fast &amp; Free</option>
-          <option value="google/gemma-3-27b-it:free">🌟 Google Gemma 3 27B — High Quality</option>
-          <option value="meta-llama/llama-3.2-3b-instruct:free">🦙 Llama 3.2 3B — Very Fast</option>
-          <option value="deepseek/deepseek-r1-distill-llama-70b:free">🧠 DeepSeek R1 70B — Best Quality (Slow)</option>
-          <option value="microsoft/phi-3-mini-128k-instruct:free">🔷 Microsoft Phi-3 Mini</option>
-          <option value="qwen/qwen-2-7b-instruct:free">🌀 Qwen 2 7B — Best Bengali ⭐</option>
+          <option value="llama-3.3-70b-versatile">🦙 Llama 3.3 70B — Best Quality ⭐</option>
+          <option value="llama-3.1-8b-instant">⚡ Llama 3.1 8B — Very Fast</option>
+          <option value="gemma2-9b-it">🌟 Gemma 2 9B — Balanced</option>
+          <option value="mixtral-8x7b-32768">🌀 Mixtral 8x7B — Long Context</option>
+          <option value="llama-3.2-3b-preview">🔷 Llama 3.2 3B — Ultra Fast</option>
+          <option value="deepseek-r1-distill-llama-70b">🧠 DeepSeek R1 70B — Reasoning</option>
         </select>
       </div>
       <div class="input-group" style="flex:1; display:flex; align-items:flex-end;">
@@ -504,16 +504,16 @@
 
 <script>
 // ── CONFIG ────────────────────────────────────────────────
-// API key এখন Netlify backend এ আছে — frontend এ দরকার নেই।
+// API key এখন Vercel backend এ আছে — frontend এ দরকার নেই।
 
 // ── MODEL META ────────────────────────────────────────────
 const modelMeta = {
-  "mistralai/mistral-7b-instruct:free":         { speed:"Fast",      bengali:"Good",        cost:"Free" },
-  "google/gemma-3-27b-it:free":                 { speed:"Medium",    bengali:"Very Good",   cost:"Free" },
-  "meta-llama/llama-3.2-3b-instruct:free":      { speed:"Very Fast", bengali:"Basic",       cost:"Free" },
-  "deepseek/deepseek-r1-distill-llama-70b:free":{ speed:"Slow",      bengali:"Excellent",   cost:"Free" },
-  "microsoft/phi-3-mini-128k-instruct:free":    { speed:"Fast",      bengali:"Basic",       cost:"Free" },
-  "qwen/qwen-2-7b-instruct:free":               { speed:"Fast",      bengali:"Best ⭐",     cost:"Free" },
+  "llama-3.3-70b-versatile":          { speed:"Fast",      bengali:"Very Good",   cost:"Free" },
+  "llama-3.1-8b-instant":             { speed:"Very Fast", bengali:"Good",        cost:"Free" },
+  "gemma2-9b-it":                     { speed:"Fast",      bengali:"Good",        cost:"Free" },
+  "mixtral-8x7b-32768":               { speed:"Medium",    bengali:"Good",        cost:"Free" },
+  "llama-3.2-3b-preview":             { speed:"Ultra Fast",bengali:"Basic",       cost:"Free" },
+  "deepseek-r1-distill-llama-70b":    { speed:"Medium",    bengali:"Excellent",   cost:"Free" },
 };
 function updateModelInfo() {
   const m = modelMeta[document.getElementById('modelSelect').value] || {};
