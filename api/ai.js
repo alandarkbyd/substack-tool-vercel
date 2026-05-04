@@ -8,21 +8,21 @@ module.exports = async function (req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
 
   if (req.method === "GET") {
-    return res.status(200).json({ status: "ok", message: "Substack AI function is running on Vercel!" });
+    return res.status(200).json({ status: "ok", message: "API is running!" });
   }
 
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json({ error: "Method Not Allowed: " + req.method });
   }
 
   const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
   if (!OPENROUTER_API_KEY) {
     return res.status(500).json({
-      error: "[Server] OPENROUTER_API_KEY সেট নেই। Vercel → Project Settings → Environment Variables চেক করো।"
+      error: "OPENROUTER_API_KEY সেট নেই। Vercel → Project Settings → Environment Variables এ যোগ করো।"
     });
   }
 
-  const { model, messages, max_tokens, temperature } = req.body;
+  const { model, messages, max_tokens, temperature } = req.body || {};
   if (!model || !messages) {
     return res.status(400).json({ error: "model এবং messages দুটোই দরকার।" });
   }
@@ -42,7 +42,7 @@ module.exports = async function (req, res) {
       "Authorization": "Bearer " + OPENROUTER_API_KEY,
       "Content-Type": "application/json",
       "Content-Length": Buffer.byteLength(postData),
-      "HTTP-Referer": req.headers.origin || req.headers.referer || "https://your-site.vercel.app",
+      "HTTP-Referer": (req.headers && (req.headers.origin || req.headers.referer)) || "https://your-site.vercel.app",
       "X-Title": "Substack Viral Generator",
     },
   };
@@ -53,14 +53,11 @@ module.exports = async function (req, res) {
         let raw = "";
         response.on("data", (chunk) => (raw += chunk));
         response.on("end", () => {
-          try {
-            resolve({ status: response.statusCode, data: JSON.parse(raw) });
-          } catch (e) {
-            reject(new Error("[Parse Error] " + raw.slice(0, 400)));
-          }
+          try { resolve({ status: response.statusCode, data: JSON.parse(raw) }); }
+          catch (e) { reject(new Error("Parse error: " + raw.slice(0, 300))); }
         });
       });
-      request.on("error", (e) => reject(new Error("[Network Error] " + e.message)));
+      request.on("error", (e) => reject(new Error("Network error: " + e.message)));
       request.write(postData);
       request.end();
     });
