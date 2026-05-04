@@ -1,1 +1,5 @@
-{}
+{
+  "routes": [
+    { "src": "/api/ai", "dest": "/api/ai.js" }
+  ]
+}
